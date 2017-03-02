@@ -1,0 +1,27 @@
+{
+  "name": "prokki/theaigames-bot-engine",
+  "description": "A bot engine to create bots for various games on http://theaigames.com/.",
+  "homepage": "https://github.com/prokki/theaigames-bot-engine",
+  "type": "library",
+  "keywords": [
+	"theaigames",
+	"ai",
+	"challenge",
+	"conquest"
+  ],
+  "license": "MIT",
+  "require": {
+	"php": ">=5.4"
+  },
+  "authors": [
+	{
+	  "name": "Falko Matthies",
+	  "email": "falko.m@web.de"
+	}
+  ],
+  "autoload": {
+	"classmap": [
+	  "src/"
+	]
+  }
+}
