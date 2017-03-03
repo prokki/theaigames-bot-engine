@@ -43,11 +43,9 @@ class Client
 	 */
 	public function __construct(Bot $bot)
 	{
-		global $argc, $argv;
+		global $argv;
 
-		$this->_parseCliArguments($argc, $argv);
-
-		Debugger::Log("test\n");
+		$this->_parseCliArguments($argv);
 
 		$this->_bot = $bot;
 
@@ -107,9 +105,11 @@ class Client
 
 				$command = $this->_bot->getParser()->run($string);
 
-				//				Debugger::Log(get_class($command) . "\n");
+//					Debugger::Log(get_class($command) . "\n");
 
 				$command->apply($this->_bot);
+
+//					Debugger::Log("applied\n");
 
 //					Debugger::Log(sprintf("Round: %d, Remaining: %d, Last: %d\n",
 //						$this->_environment->getCurrentRoundNo(),
@@ -138,7 +138,7 @@ class Client
 
 					Debugger::Log(sprintf("send: %s\n", $send));
 				}
-//
+
 //				}
 //				catch( \Exception $exception )
 //				{
@@ -167,10 +167,9 @@ class Client
 
 	/**
 	 *
-	 * @param integer $argc
-	 * @param string  $argv
+	 * @param string[] $argv
 	 */
-	protected function _parseCliArguments($argc, $argv)
+	protected function _parseCliArguments($argv)
 	{
 		$this->_parseCliArgumentHelp($argv);
 		$this->_parseCliArgumentDebug($argv);
@@ -178,7 +177,7 @@ class Client
 
 	/**
 	 *
-	 * @param string $argv
+	 * @param string[] $argv
 	 */
 	protected function _parseCliArgumentHelp($argv)
 	{
@@ -190,7 +189,7 @@ class Client
 
 	/**
 	 *
-	 * @param string $argv
+	 * @param string[] $argv
 	 *
 	 * @return Debugger
 	 */

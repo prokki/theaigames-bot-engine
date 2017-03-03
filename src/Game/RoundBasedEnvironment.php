@@ -38,12 +38,28 @@ class RoundBasedEnvironment implements Environment
 		$this->setMaxRounds($max_rounds);
 
 		$this->_rounds = new \ArrayObject();
-		$this->_rounds->offsetSet($this->_currentRoundNo, $this->getNewRound());
+		$this->_rounds->offsetSet($this->_currentRoundNo, $this->_newRound());
 	}
 
-	protected function getNewRound()
+	/**
+	 * Returns a new round genereated by the EnvironmentFactory object.
+	 *
+	 * Bs sure to use trait {@see \Prokki\TheaigamesBotEngine\Game\EnvironmentFactoryRoundable} in your custom
+	 * {@see \Prokki\TheaigamesBotEngine\Game\EnvironmentFactory} if you use the {@ \Prokki\TheaigamesBotEngine\Game\RoundBasedEnvironment}.
+	 *
+	 * @return Round
+	 */
+	private function _newRound()
 	{
-		return new Round($this->_currentRoundNo);
+		/** @var EnvironmentFactoryRoundable $environment_factory */
+		$environment_factory = EnvironmentFactory::Get();
+
+		if( !in_array(EnvironmentFactoryRoundable::class, class_uses($environment_factory)) )
+		{
+			// TODO throw
+		}
+
+		return $environment_factory->newRound($this->_currentRoundNo);
 	}
 
 	/**
@@ -97,7 +113,7 @@ class RoundBasedEnvironment implements Environment
 	{
 		++$this->_currentRoundNo;
 
-		$new_round = $this->getNewRound();
+		$new_round = $this->_newRound();
 
 		$this->_rounds->offsetSet($this->_currentRoundNo, $new_round);
 
