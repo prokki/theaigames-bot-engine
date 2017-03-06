@@ -2,7 +2,6 @@
 
 namespace Prokki\TheaigamesBotEngine;
 
-use Prokki\TheaigamesBotEngine\Bot\Bot;
 use Prokki\TheaigamesBotEngine\Command\Computable;
 use Prokki\TheaigamesBotEngine\Util\Debugger;
 
@@ -12,6 +11,8 @@ if( !defined('PROKKIBOT_MAX_SERVER_TIMEOUT') )
 {
 	define('PROKKIBOT_MAX_SERVER_TIMEOUT', 60); // [s]
 }
+
+set_error_handler("exception_error_handler");
 
 /**
  * Class Client
@@ -50,9 +51,7 @@ class Client
 		$this->_bot = $bot;
 
 		$this->_input  = fopen('php://stdin', 'r');
-		$this->_output = fopen('php://stdout', 'w');
-
-
+		$this->_output = fopen('php://stdout', 'a');
 	}
 
 	/**
@@ -100,14 +99,14 @@ class Client
 
 				$end_of_stream = feof($_handle);
 
-//				try
-//				{
+				try
+				{
 
-				$command = $this->_bot->getParser()->run($string);
+					$command = $this->_bot->getParser()->run($string);
 
 //					Debugger::Log(get_class($command) . "\n");
 
-				$command->apply($this->_bot);
+					$command->apply($this->_bot);
 
 //					Debugger::Log("applied\n");
 
@@ -117,41 +116,41 @@ class Client
 //						$this->_environment->isLastRound()
 //					));
 
-				if( $command->isComputable() )
-				{
+					if( $command->isComputable() )
+					{
 
-					/** @var Computable $command */
-					$send = $command->compute($this->_bot);
+						/** @var Computable $command */
+						$send = $command->compute($this->_bot);
 
-					$duration = ( get_microtime_float() - $time_start );
+						$duration = ( get_microtime_float() - $time_start );
 //					Bot::Debug("TIME: " . $duration . "\n");
 
-					if( defined('PROKKIBOT_MIN_COMPUTATION_TIME') && !empty(PROKKIBOT_MIN_COMPUTATION_TIME) && $duration < ( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) )
-					{
-						usleep(( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) - $duration); // wait until at least 1ms are gone
+						if( defined('PROKKIBOT_MIN_COMPUTATION_TIME') && !empty(PROKKIBOT_MIN_COMPUTATION_TIME) && $duration < ( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) )
+						{
+							usleep(( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) - $duration); // wait until at least 1ms are gone
 
 //						$duration = ( get_microtime_float() - $time_start );
 //						Client::Debug("TIME: " . $duration . "\n");
+						}
+
+						fwrite($this->_output, $send . "\n");
+
+						Debugger::Log(sprintf("send: %s\n", $send));
 					}
+
+				}
+				catch( \Exception $exception )
+				{
+					Debugger::Log(sprintf("Exception:%s\n\n%s", $exception->getMessage(), $exception->getTraceAsString()));
+
+					$send = "Aborting due an error :-(";
 
 					fwrite($this->_output, $send . "\n");
 
 					Debugger::Log(sprintf("send: %s\n", $send));
-				}
 
-//				}
-//				catch( \Exception $exception )
-//				{
-//					Debugger::Log(sprintf("Exception:%s\n\n%s", $exception->getMessage(), $exception->getTraceAsString()));
-//
-//					$send = "Aborting due an error :-(";
-//
-//					fwrite($this->_output, $send . "\n");
-//
-//					Debugger::Log(sprintf("send: %s\n", $send));
-//
-//					$end_of_stream = true;
-//				}
+					$end_of_stream = true;
+				}
 
 			}
 		}

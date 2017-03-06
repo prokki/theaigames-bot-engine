@@ -1,6 +1,6 @@
 <?php
 
-namespace Prokki\TheaigamesBotEngine\Bot;
+namespace Prokki\TheaigamesBotEngine;
 
 use Prokki\TheaigamesBotEngine\Command\Parser;
 use Prokki\TheaigamesBotEngine\Game\Environment;

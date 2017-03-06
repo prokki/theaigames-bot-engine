@@ -2,7 +2,7 @@
 
 namespace Prokki\TheaigamesBotEngine\Command;
 
-use Prokki\TheaigamesBotEngine\Bot\Bot;
+use Prokki\TheaigamesBotEngine\Bot;
 
 /**
  * A EmptyReceivableCommand command can be assigned to requests, that do not need to be handled.

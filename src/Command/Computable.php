@@ -2,7 +2,7 @@
 
 namespace Prokki\TheaigamesBotEngine\Command;
 
-use Prokki\TheaigamesBotEngine\Bot\Bot;
+use Prokki\TheaigamesBotEngine\Bot;
 
 /**
  * Interface Computable

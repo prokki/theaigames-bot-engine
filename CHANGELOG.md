@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project TheaigameBotEngine to [Semantic Versioning](http://semver.org/).
 
+### [Unreleased] ### [0.0.3] - 2017-03-XX
+
+#### Fixed
+* Class AI renamed to [Bot](src/Bot.php).
+
+#### Changed
+* Moved class [Bot](src/Bot.php) to [src](src/) directory.
+
 ### [0.0.2] - 2017-03-03
 
 #### Fixed
