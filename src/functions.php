@@ -1,9 +1,5 @@
 <?php
 
-namespace Prokki\TheaigamesBotEngine;
-
-use ErrorException;
-
 function size_to_readable_string($size)
 {
 	$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');

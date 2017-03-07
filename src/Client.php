@@ -25,17 +25,32 @@ class Client
 	/**
 	 * @var resource
 	 */
-	protected $_input = null;
+	private $_input = null;
 
 	/**
 	 * @var resource
 	 */
-	protected $_output = null;
+	private $_output = null;
 
 	/**
 	 * @var Bot
 	 */
-	protected $_bot = null;
+	private $_bot = null;
+
+	private static function _WaitForMinCompuitationTime($time_start)
+	{
+		$duration = ( get_microtime_float() - $time_start );
+
+//		Bot::Debug("TIME: " . $duration . "\n");
+
+		if( $duration < ( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) )
+		{
+			usleep(( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) - $duration); // wait until at least 1ms are gone
+		}
+
+//		$duration = ( get_microtime_float() - $time_start );
+//		Client::Debug("TIME: " . $duration . "\n");
+	}
 
 	/**
 	 * Warlight2Bot constructor.
@@ -72,11 +87,18 @@ class Client
 		// stream ends?
 		$end_of_stream = false;
 
+		$waitForMinComputationTime = defined('PROKKIBOT_MIN_COMPUTATION_TIME') && !empty(PROKKIBOT_MIN_COMPUTATION_TIME);
+
 		do
 		{
 
 			$changed_streams = stream_select($read, $write, $except, PROKKIBOT_MAX_SERVER_TIMEOUT);
 
+			if( $waitForMinComputationTime )
+			{
+				$time_start = get_microtime_float();
+			}
+			
 			if( false === $changed_streams )
 			{
 				die();
@@ -84,8 +106,6 @@ class Client
 
 			foreach( $read as $_handle )
 			{
-
-				$time_start = get_microtime_float();
 
 				$string = trim(fgets($_handle));
 
@@ -122,15 +142,9 @@ class Client
 						/** @var Computable $command */
 						$send = $command->compute($this->_bot);
 
-						$duration = ( get_microtime_float() - $time_start );
-//					Bot::Debug("TIME: " . $duration . "\n");
-
-						if( defined('PROKKIBOT_MIN_COMPUTATION_TIME') && !empty(PROKKIBOT_MIN_COMPUTATION_TIME) && $duration < ( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) )
+						if( $waitForMinComputationTime )
 						{
-							usleep(( PROKKIBOT_MIN_COMPUTATION_TIME * 1000 ) - $duration); // wait until at least 1ms are gone
-
-//						$duration = ( get_microtime_float() - $time_start );
-//						Client::Debug("TIME: " . $duration . "\n");
+							self::_WaitForMinCompuitationTime($time_start);
 						}
 
 						fwrite($this->_output, $send . "\n");
@@ -161,14 +175,13 @@ class Client
 		Debugger::Log("END!\n");
 
 		fclose($this->_input);
-
 	}
 
 	/**
 	 *
 	 * @param string[] $argv
 	 */
-	protected function _parseCliArguments($argv)
+	private function _parseCliArguments($argv)
 	{
 		$this->_parseCliArgumentHelp($argv);
 		$this->_parseCliArgumentDebug($argv);
@@ -178,7 +191,7 @@ class Client
 	 *
 	 * @param string[] $argv
 	 */
-	protected function _parseCliArgumentHelp($argv)
+	private function _parseCliArgumentHelp($argv)
 	{
 		if( count(array_diff(['--help', '-h'], $argv)) < 2 )
 		{
@@ -192,7 +205,7 @@ class Client
 	 *
 	 * @return Debugger
 	 */
-	protected function _parseCliArgumentDebug($argv)
+	private function _parseCliArgumentDebug($argv)
 	{
 		if( count(array_diff(['--debug', '-d'], $argv)) === 2 )
 		{
@@ -221,7 +234,7 @@ class Client
 		return Debugger::Init($file);
 	}
 
-	protected function _exitWithUsage($argv)
+	private function _exitWithUsage($argv)
 	{
 		printf("usage: php %s [--debug FILE]\n", basename(realpath($argv[ 0 ])));
 		exit(0);

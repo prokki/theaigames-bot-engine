@@ -8,9 +8,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 #### Fixed
 * Class AI renamed to [Bot](src/Bot.php).
+* Removed namespace from functions file.
 
 #### Changed
 * Moved class [Bot](src/Bot.php) to [src](src/) directory.
+* Extended Client with  method _WaitForMinCompuitationTime().
 
 ### [0.0.2] - 2017-03-03
 
