@@ -24,4 +24,12 @@ class RuntimeException extends \Exception
 	{
 		return new self("The environment factory was already initialized.\nPlease call EnvironmentFactory::Init() only once.");
 	}
+
+	/**
+	 * @return RuntimeException
+	 */
+	public static function EnvironmentFactoryIsNotRoundBased()
+	{
+		return new self("The initialized environment factory does not use trait RoundBasedEnvironmentFactory.");
+	}
 }

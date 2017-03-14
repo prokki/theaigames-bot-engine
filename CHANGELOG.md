@@ -4,7 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project TheaigameBotEngine to [Semantic Versioning](http://semver.org/).
 
-[0.1.0] - 2017-03-08
+### [0.1.1] - 2017-03-14
+
+#### Fixed
+* Implemented missing Exception in [RoundBasedEnvironment](src/Game/RoundBasedEnvironment.php). 
+
+### [0.1.0] - 2017-03-08
 
 #### Fixed
 * Class AI renamed to [Bot](src/Bot.php).
