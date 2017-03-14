@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project TheaigameBotEngine to [Semantic Versioning](http://semver.org/).
 
+### [0.1.2] - 2017-03-14
+
+#### Fixed
+* [RoundBasedEnvironment](src/Game/RoundBasedEnvironment.php) is included via inheritance and not via trait. 
+
 ### [0.1.1] - 2017-03-14
 
 #### Fixed

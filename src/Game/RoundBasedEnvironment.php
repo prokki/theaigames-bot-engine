@@ -58,7 +58,7 @@ class RoundBasedEnvironment implements Environment
 		/** @var RoundBasedEnvironmentFactory $environment_factory */
 		$environment_factory = EnvironmentFactory::Get();
 
-		if( !in_array(RoundBasedEnvironmentFactory::class, class_uses($environment_factory)) )
+		if( !in_array(RoundBasedEnvironmentFactory::class, class_parents($environment_factory)) )
 		{
 			throw RuntimeException::EnvironmentFactoryIsNotRoundBased();
 		}
